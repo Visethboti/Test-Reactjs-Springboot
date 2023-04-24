@@ -1,9 +1,9 @@
 package com.example.testReact.controller;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,12 +13,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.testReact.entity.Employee;
+import com.example.testReact.service.EmployeeService;
 
 @RestController
 @RequestMapping("Employee")
 public class EmployeeController {
 
-	private List<Employee> listEmployee = new ArrayList<Employee>();
+	@Autowired
+	EmployeeService employeeService;
 
 	@GetMapping("/GetHelloWorld")
 	public String GetHelloWorld() {
@@ -28,48 +30,27 @@ public class EmployeeController {
 	@GetMapping("")
 	public List<Employee> Employee() {
 		System.out.println("Incoming Get Request /Employee");
-		return listEmployee;
+		return employeeService.findAll();
 	}
 
 	@PostMapping("")
-	public HashMap<String, String> Employee(@RequestBody HashMap<String, String> str) {
-		System.out.println("Incoming Post Request /Employee: " + str);
+	public void Employee(@RequestBody HashMap<String, String> map) {
+		System.out.println("Incoming Post Request /Employee: " + map);
 
-		listEmployee.add(new Employee(Integer.parseInt(str.get("id")), str.get("name")));
-
-		HashMap<String, String> map = new HashMap<>();
-		map.put("id", "66");
-
-		return map;
+		employeeService.save(new Employee(Integer.parseInt(map.get("id")), map.get("name")));
 	}
 
 	@GetMapping("/{id}")
 	public Employee FindByIds(@PathVariable String id) {
 		System.out.println("Incoming Get Request /Employee/: " + id);
-		HashMap<String, String> map = new HashMap<>();
 
-		for (Employee e : listEmployee) {
-			if (e.getId() == Integer.parseInt(id)) {
-				return e;
-			}
-		}
-
-		return new Employee(0, "Error");
+		return employeeService.findById(Integer.parseInt(id));
 	}
 
 	@GetMapping("/Delete")
-	public String Employee(@RequestParam int id) {
+	public void Employee(@RequestParam int id) {
 		System.out.println("Incoming Post Request /Employee/Delete: " + id);
 
-		int i = 0;
-		for (Employee e : listEmployee) {
-			if (e.getId() == id) {
-				listEmployee.remove(i);
-				break;
-			}
-			i++;
-		}
-
-		return "Hello";
+		employeeService.deleteById(id);
 	}
 }
