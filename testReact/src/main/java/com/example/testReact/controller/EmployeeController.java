@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,6 +27,7 @@ public class EmployeeController {
 
 	@GetMapping("")
 	public List<Employee> Employee() {
+		System.out.println("Incoming Get Request /Employee");
 		return listEmployee;
 	}
 
@@ -39,6 +41,20 @@ public class EmployeeController {
 		map.put("id", "66");
 
 		return map;
+	}
+
+	@GetMapping("/{id}")
+	public Employee FindByIds(@PathVariable String id) {
+		System.out.println("Incoming Get Request /Employee/: " + id);
+		HashMap<String, String> map = new HashMap<>();
+
+		for (Employee e : listEmployee) {
+			if (e.getId() == Integer.parseInt(id)) {
+				return e;
+			}
+		}
+
+		return new Employee(0, "Error");
 	}
 
 	@GetMapping("/Delete")

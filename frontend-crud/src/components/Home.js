@@ -14,8 +14,6 @@ function Home() {
     fetch("/Employee/Delete?id="+id)
       .then(res => res.json());
 
-
-
     // // get index of the item with this id
     // var index = items.map(function(e){
     //     return e.id
@@ -38,7 +36,7 @@ function Home() {
           setItems(result);
         }
       )
-    }, []) // [] mean run only onced when rendered
+    }, []) // , [])  mean run only onced when rendered, empty mean run everytime the page load
 
   return (
     <>
@@ -64,7 +62,7 @@ function Home() {
                                     {item.name}
                                 </td>
                                 <td>
-                                    <Link to={'/Update?id='+item.id}>
+                                    <Link to={'/Update/'+item.id}>
                                         <Button>Update</Button>
                                     </Link>
                                     <Button onClick={() => {handleDelete(item.id)}}>Delete</Button>

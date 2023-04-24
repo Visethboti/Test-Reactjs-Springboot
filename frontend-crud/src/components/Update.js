@@ -7,24 +7,23 @@ import { Link, useNavigate } from "react-router-dom";
 import { useParams } from 'react-router-dom';
 
 function Update() {
-    let { id } = useParams();
-    alert(id);
+    let {id} = useParams();
 
-    const [newID, setID] = useState('');
+    const [_id, setID] = useState('');
     const [name, setName] = useState('');
-    
+
     let history = useNavigate();
 
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        let a = newID;
+        let a = _id;
         let b = name;
 
         const requestOptions = {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ newID: a,
+            body: JSON.stringify({ id: a,
                                 name: b })
         };
         fetch('/Employee', requestOptions)
@@ -33,16 +32,28 @@ function Update() {
         history('/');
     }
 
+    useEffect(() => {
+        fetch("/Employee/"+ id)
+          .then(res => res.json())
+          .then(
+            (result) => {
+              setName(result.name);
+              setID(result.id);
+            }
+          )
+        }, [])
+
+
     return (
         <>
             <Form className="d-grid gap-2" style={{margin:"15rem"}}>
                 <FormGroup className="mb-3" controlId="formID">
                     <Label>ID</Label>
-                    <Input type="number" placeholder="Enter ID" onChange={(e) => setID(e.target.value)}/>
+                    <Input type="number" placeholder="Enter ID" onChange={(e) => setID(e.target.value)} value={_id} required/>
                 </FormGroup>
                 <FormGroup className="mb-3" controlId="formName">
                     <Label>Name</Label>
-                    <Input type="text" placeholder="Enter Name" onChange={(e) => setName(e.target.value)}/>
+                    <Input type="text" placeholder="Enter Name" onChange={(e) => setName(e.target.value)} value={name} required/>
                 </FormGroup>
                 <Button onClick={(e) => handleSubmit(e)} type="submit">Submit</Button>
             </Form>

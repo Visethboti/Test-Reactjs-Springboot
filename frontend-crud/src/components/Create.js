@@ -34,11 +34,11 @@ function Create() {
             <Form className="d-grid gap-2" style={{margin:"15rem"}}>
                 <FormGroup className="mb-3" controlId="formID">
                     <Label>ID</Label>
-                    <Input type="number" placeholder="Enter ID" onChange={(e) => setID(e.target.value)}/>
+                    <Input type="number" placeholder="Enter ID" onChange={(e) => setID(e.target.value)} required/>
                 </FormGroup>
                 <FormGroup className="mb-3" controlId="formName">
                     <Label>Name</Label>
-                    <Input type="text" placeholder="Enter Name" onChange={(e) => setName(e.target.value)}/>
+                    <Input type="text" placeholder="Enter Name" onChange={(e) => setName(e.target.value)} required/>
                 </FormGroup>
                 <Button onClick={(e) => handleSubmit(e)} type="submit">Submit</Button>
             </Form>
